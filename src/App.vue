@@ -1,26 +1,56 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <ul>
+      <li 
+        v-for="item in array"
+        :key="item.id"
+        
+      >
+        <input
+          type="text" 
+          v-model="item.title"
+          ref="itemInput"
+        >
+      </li>
+    </ul>
+  </div>
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import {ref, reactive, watch, onMounted} from 'vue'
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  setup() {
+    const itemInput = ref([])
+    const array = reactive([
+	    {id: 1, title: ''},
+      {id: 2, title: ''},
+      {id: 3, title: ''}
+    ])
+
+    onMounted(() => {
+      for (let i = 0; i < array.length; i++) {
+        watch(() => array[i],
+          () => {
+            for (let k = 0; k < array.length; k++) {
+              itemInput.value[k].classList.remove('active')
+            }
+            itemInput.value[i].classList.add('active')
+          },
+          {deep: true}
+        )
+      }
+    })
+    
+    return {
+      array, itemInput
+    }
+  } 
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  .active {
+    background-color: red;
+  }
 </style>
