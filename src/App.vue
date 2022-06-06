@@ -30,20 +30,25 @@ export default {
 
     onMounted(() => {
       for (let i = 0; i < array.length; i++) {
-        watch(() => array[i],
+        watching(array[i], i);
+      }
+    })
+
+    const watching = (watchObj, idx) => {
+      watch(() => watchObj,
           () => {
             for (let k = 0; k < array.length; k++) {
               itemInput.value[k].classList.remove('active')
             }
-            itemInput.value[i].classList.add('active')
+            itemInput.value[idx].classList.add('active')
           },
           {deep: true}
         )
-      }
-    })
+    }
+    
     
     return {
-      array, itemInput
+      array, itemInput, watching
     }
   } 
 }
