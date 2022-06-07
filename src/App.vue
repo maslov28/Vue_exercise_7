@@ -9,7 +9,8 @@
         <input
           type="text" 
           v-model="item.title"
-          ref="itemInput"
+          @input="index = item.id"
+          :class="{active: index == item.id}"
         >
       </li>
     </ul>
@@ -18,37 +19,19 @@
 </template>
 
 <script>
-import {ref, reactive, watch, onMounted} from 'vue'
+import {ref, reactive} from 'vue'
 export default {
   setup() {
-    const itemInput = ref([])
     const array = reactive([
 	    {id: 1, title: ''},
       {id: 2, title: ''},
       {id: 3, title: ''}
     ])
 
-    onMounted(() => {
-      for (let i = 0; i < array.length; i++) {
-        watching(array[i], i);
-      }
-    })
+    const index = ref()
 
-    const watching = (watchObj, idx) => {
-      watch(() => watchObj,
-          () => {
-            for (let k = 0; k < array.length; k++) {
-              itemInput.value[k].classList.remove('active')
-            }
-            itemInput.value[idx].classList.add('active')
-          },
-          {deep: true}
-        )
-    }
-    
-    
     return {
-      array, itemInput, watching
+      array, index
     }
   } 
 }
